@@ -39,10 +39,7 @@ router.post('/info', function(req, res, next) {
 				if(err){
 					console.log(err);
 				}
-				console.log(req.body[0]);
-				console.log(req.body[1]);
-				collection.update(req.body[0], {$set:req.body[1]}, {safe:true}, function(err, result){
-					console.log(result);
+				collection.update({"id":req.body.id}, {$set:req.body}, {safe:true}, function(err, result){
 				});
 			});
 		}
@@ -63,11 +60,33 @@ router.post('/health', function(req, res, next) {
 				if(err){
 					console.log(err);
 				}
-				console.log(req.body[0]);
-				console.log(req.body[1]);
-				collection.update(req.body[0], {$set:req.body[1]}, {safe:true}, function(err, result){
+				collection.insert(req.body,{safe:true},function(err, result){
 					console.log(result);
 				});
+			});
+		}
+	}); 
+	json = {"result" : 0,"reason" : ""};
+	res.send(json);
+});
+
+router.post('/add', function(req, res, next) {
+	var  mongodb = require('mongodb');
+	var  server  = new mongodb.Server('localhost', 27017, {auto_reconnect:true});
+	var  db = new mongodb.Db('pet', server, {safe:true});
+	page = req.body.page;
+	page = parseInt(page);
+	db.open(function(err, db){
+		if(!err){
+			db.collection('a',{safe:true}, function(err, collection){
+				if(err){
+					console.log(err);
+				}
+				collection.insert(req.body,{safe:true},function(err, result){
+					console.log(result);
+					//collection.update({title:'hello'}, {$set:{number:3}}, {safe:true}, function(err, result){
+					//});
+ 				}); 
 			});
 		}
 	}); 
