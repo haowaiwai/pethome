@@ -92,5 +92,26 @@ router.post('/add', function(req, res, next) {
 	res.send(json);
 });
 
+router.post('/mode', function(req, res, next) {
+	var  mongodb = require('mongodb');
+	var  server  = new mongodb.Server('localhost', 27017, {auto_reconnect:true});
+	var  db = new mongodb.Db('petHome', server, {safe:true});
+	page = req.body.page;
+	page = parseInt(page);
+	db.open(function(err, db){
+		if(!err){
+			db.collection('pet',{safe:true}, function(err, collection){
+				if(err){
+					console.log(err);
+				}
+				collection.update({"_id":ObjectID(req.body.id)}, {$set:req.body}, {safe:true}, function(err, result){
+				});
+			});
+		}
+	}); 
+	json = {"result" : 0,"reason" : ""};
+	res.send(json);
+});
+
 module.exports = router;
 
