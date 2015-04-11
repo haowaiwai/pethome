@@ -5,6 +5,7 @@ router.post('/list', function(req, res, next) {
 	var  mongodb = require('mongodb');
 	var  server  = new mongodb.Server('localhost', 27017, {auto_reconnect:true});
 	var  db = new mongodb.Db('petHome', server, {safe:true});
+	console.log(req.body);
 	page = req.body.page;
 	page = parseInt(page);
 	db.open(function(err, db){
