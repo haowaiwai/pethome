@@ -15,6 +15,7 @@ router.post('/reg', function(req, res, next) {
 					console.log(err);
 				}
 				collection.insert(req.body,{safe:true},function(err, result){
+					db.close();
 				});
 			});
 		}
@@ -42,6 +43,7 @@ router.post('/login', function(req, res, next) {
 						json = {"result" : 0,"reason" : ""};
 						res.send(json);
 					}
+					db.close();
 				});
 			});
 		}
@@ -96,6 +98,7 @@ router.post('/notify', function(req, res, next) {
 						}
 						collection.find({uid:docs[0].uid}).toArray(function(err, docs) {
 							notify(docs[0].deviceToken,req.body.content);
+							db.close();
 						});
 					});
 				});
