@@ -120,9 +120,17 @@ function insertAttachment(id,attachments) {
 				if(err){
 					console.log(err);
 				}
-				collection.update({"uid":id}, {$set:{'attachments':attachments}}, {safe:true}, function(err, result){
+				for (var i = 0; i < attachments.length-1; i++) {
+					collection.update({"uid":id}, {$push:{'attachments':attachments[i]}}, {safe:true}, function(err, result){
+						
+					});
+				}
+				collection.update({"uid":id}, {$push:{'attachments':attachments[attachments.length-1]}}, {safe:true}, function(err, result){
 					db.close();
 				});
+				/*collection.update({"uid":id}, {$push:{'attachments':attachments}}, {safe:true}, function(err, result){
+					db.close();
+				});*/
 			});
 		}
 	});
@@ -134,7 +142,7 @@ router.post('/upload/:id', function(req, res, next) {
 	console.log(upfile.files);
 	upfile = upfile.files.file;
 	var files = [];
-	if (upfile instanceof  Array) {
+	if (upfile instanceof Array) {
 		files = upfile;
 	} else {
 		files.push(upfile);
