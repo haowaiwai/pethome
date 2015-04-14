@@ -90,9 +90,48 @@ router.post('/bind', function(req, res, next) {
 	res.send(json);
 });
 
+router.post('/article', function(req, res, next) {
+	var  mongodb = require('mongodb');
+	var  server  = new mongodb.Server('localhost', 27017, {auto_reconnect:true});
+	var  db = new mongodb.Db('petHome', server, {safe:true});
+	db.open(function(err, db){
+		if(!err){
+			db.collection('article',{safe:true}, function(err, collection){
+				if(err){
+					console.log(err);
+				}
+				collection.insert(req.body,{safe:true},function(err, result){
+					db.close();
+				});
+			});
+		}
+	}); 
+	json = {"result" : 0,"reason" : ""};
+	res.send(json);
+});
+
+function insertAttachment(id,attachments) {
+	var  mongodb = require('mongodb');
+	var  server  = new mongodb.Server('localhost', 27017, {auto_reconnect:true});
+	var  db = new mongodb.Db('petHome', server, {safe:true});
+	db.open(function(err, db){
+		if(!err){
+			db.collection('article',{safe:true}, function(err, collection){
+				if(err){
+					console.log(err);
+				}
+				collection.update({"uid":id}, {$set:{'attachments':attachments}}, {safe:true}, function(err, result){
+					db.close();
+				});
+			});
+		}
+	});
+}
+
 router.post('/upload/:id', function(req, res, next) {
 	var upfile = req;
 	console.log(req.params.id);
+	console.log(upfile.files);
 	upfile = upfile.files.file;
 	var files = [];
 	if (upfile instanceof  Array) {
@@ -100,6 +139,7 @@ router.post('/upload/:id', function(req, res, next) {
 	} else {
 		files.push(upfile);
 	}
+	var attachments = [];
 	for (var i = 0; i < files.length; i++) {
 		var file = files[i];
 		var path = file.path;
@@ -108,9 +148,41 @@ router.post('/upload/:id', function(req, res, next) {
 		fs.rename(path, target_path, function (err) {
 			if (err) throw err;
 		});
+		attachments.push('http://60.206.36.139/images/user/'+name);
 	}
+	insertAttachment(req.params.id,attachments)
 	json = {"result" : 0,"reason" : ""};
 	res.send(json);
+});
+
+router.post('/list', function(req, res, next) {
+	var  mongodb = require('mongodb');
+	var  server  = new mongodb.Server('localhost', 27017, {auto_reconnect:true});
+	var  db = new mongodb.Db('petHome', server, {safe:true});
+	page = req.body.page;
+	page = parseInt(page);
+	db.open(function(err, db){
+		if(!err){
+			db.collection('article',{safe:true}, function(err, collection){
+				if(err){
+					console.log(err);
+				}
+				collection.count({}, function(err, count){
+					if (typeof(req.body.uid) == "undefined") {
+						collection.find().skip((page-1)*1).limit(1).toArray(function(err,docs){
+							res.send(docs);
+							db.close();
+						});
+					} else {
+						collection.find({"id":req.body.uid}).skip((page-1)*1).limit(1).toArray(function(err,docs){
+							res.send(docs);
+							db.close();
+						}); 
+					}
+				});
+			});
+		}
+	}); 
 });
 
 module.exports = router;
