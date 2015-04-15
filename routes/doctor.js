@@ -87,22 +87,25 @@ router.post('/notify', function(req, res, next) {
 	var  db = new mongodb.Db('petHome', server, {safe:true});
 	db.open(function(err, db){
 		if(!err){
-			db.collection('pet',{safe:true}, function(err, collection){
-				if(err){
-					console.log(err);
-				}
-				collection.find({_id:ObjectID(req.body.pid)}).toArray(function(err, docs) {
-					db.collection('user',{safe:true}, function(err, collection){
-						if(err){
-							console.log(err);
-						}
-						collection.find({uid:docs[0].uid}).toArray(function(err, docs) {
-							notify(docs[0].deviceToken,req.body.content);
-							db.close();
+			if (typeof(req.body.pid) == "undefined") {
+			} else {
+				db.collection('pet',{safe:true}, function(err, collection){
+					if(err){
+						console.log(err);
+					}
+					collection.find({_id:ObjectID(req.body.pid)}).toArray(function(err, docs) {
+						db.collection('user',{safe:true}, function(err, collection){
+							if(err){
+								console.log(err);
+							}
+							collection.find({uid:docs[0].uid}).toArray(function(err, docs) {
+								notify(docs[0].deviceToken,req.body.content);
+								db.close();
+							});
 						});
 					});
 				});
-			});
+			}
 		}
 	}); 
 	json = {"result" : 0,"reason" : ""};
