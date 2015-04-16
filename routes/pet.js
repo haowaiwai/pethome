@@ -16,7 +16,7 @@ router.post('/list', function(req, res, next) {
 					console.log(err);
 				}
 				collection.count({}, function(err, count){
-					collection.find().skip((page-1)*1).limit(1).toArray(function(err,docs){
+					collection.find().skip((page-1)*10).limit(10).toArray(function(err,docs){
 						json = {};
 						json.total_results = count;
 						json.page = page;
