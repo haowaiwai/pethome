@@ -52,7 +52,10 @@ router.post('/login', function(req, res, next) {
 
 function notify(token,content) {
 	//var token = '69c16e9040bf267b9d81b3ae53e7d1ab8e5b0a5f4e36a0fb9c96273b632a9504'; //长度为64的设备Token
-	var options = { "gateway": "gateway.sandbox.push.apple.com" },
+	var options = { "gateway": "gateway.sandbox.push.apple.com",
+		"cert":"cert.pem",
+		"key":"key.pem"};
+	console.log(token);
 	apnConnection = new apn.Connection(options),
 	device = new apn.Device(token),
 	note = new apn.Notification();
@@ -93,12 +96,17 @@ router.post('/notify', function(req, res, next) {
 					if(err){
 						console.log(err);
 					}
-					collection.find({_id:ObjectID(req.body.pid)}).toArray(function(err, docs) {
+					var objectid = req.body.pid;
+					if(req.body.pid.length == 24) {
+						objectid = ObjectID(objectid);
+					}
+					collection.findOne({_id:objectid},function(err, doc) {
+						if(doc == null) return;
 						db.collection('user',{safe:true}, function(err, collection){
 							if(err){
 								console.log(err);
 							}
-							collection.find({uid:docs[0].uid}).toArray(function(err, docs) {
+							collection.find({uid:doc.uid}).toArray(function(err, docs) {
 								notify(docs[0].deviceToken,req.body.content);
 								db.close();
 							});
