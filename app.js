@@ -1,6 +1,7 @@
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
+var rotatingLogStream = require('file-stream-rotator').getStream({filename:"log/pet.log", frequency:"1h", verbose: false});
 var fs = require('fs')
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
@@ -20,10 +21,13 @@ app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
-var accessLogStream = fs.createWriteStream(__dirname + '/access.log', {flags: 'a'})
+var logDirectory = __dirname + '/log'
+// ensure log directory exists
+fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory)
+// create a rotating write stream
 //app.use(logger('dev',{stream: accessLogStream}));
 logger.token('type', function(req, res){ return JSON.stringify(req.body); })
-app.use(logger(':method :url :status :type',{stream: accessLogStream}));
+app.use(logger(':method :url :status :type',{stream: rotatingLogStream}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());

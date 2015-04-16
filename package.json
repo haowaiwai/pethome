@@ -16,6 +16,7 @@
     "mongodb": "*",
     "apn": "*",
     "bson": "*",
-    "connect-multiparty": "*"
+    "connect-multiparty": "*",
+    "file-stream-rotator": "*"
   }
 }
