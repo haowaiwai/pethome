@@ -1,5 +1,25 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+	.jumbotron
+		form.form-horizontal
+			.form-group
+				label(for='inputEmail3',class='col-sm-2 control-label') 宠物温度
+				.col-sm-10
+					input(type='number',class='form-control',id='inputTemperatureMin',placeholder='最小值')
+					input(type='number',class='form-control',id='inputTemperatureMax',placeholder='最大值')
+			.form-group
+				label(for='inputEmail3',class='col-sm-2 control-label') 宠物运动量
+				.col-sm-10
+					input(type='number',class='form-control',id='inputTemperatureMin',placeholder='开始时间XX:XX')
+					input(type='number',class='form-control',id='inputTemperatureMax',placeholder='结束时间XX:XX')
+					input(type='number',class='form-control',id='inputTemperatureMax',placeholder='最小值')
+			.form-group
+				div(class='col-sm-offset-2 col-sm-10')
+					button(type='button',class='btn btn-lg btn-primary',id='saveButton') 保存
+		script(type='text/javascript').
+			$(function () {
+				$('#saveButton').on('click', function () {
+					alert('ok');
+				})
+			})
