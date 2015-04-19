@@ -225,5 +225,25 @@ router.post('/test', function(req, res, next) {
 	res.send(json);
 });
 
+router.post('/set', function(req, res, next) {
+	var  mongodb = require('mongodb');
+	var  server  = new mongodb.Server('localhost', 27017, {auto_reconnect:true});
+	var  db = new mongodb.Db('petHome', server, {safe:true});
+	db.open(function(err, db){
+		if(!err){
+			db.collection('set',{safe:true}, function(err, collection){
+				if(err){
+					console.log(err);
+				}
+				collection.update({"id":1}, {$set:req.body}, {safe:true}, function(err, result){
+					global.set = req.body;
+					db.close();
+				});
+			});
+		}
+	}); 
+	json = {"result" : 0,"reason" : ""};
+	res.send(json);
+});
 module.exports = router;
 

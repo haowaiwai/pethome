@@ -73,5 +73,30 @@ app.use(function(err, req, res, next) {
   });
 });
 
+var set;
+function load() {
+  var  mongodb = require('mongodb');
+  var  server  = new mongodb.Server('localhost', 27017, {auto_reconnect:true});
+  var  db = new mongodb.Db('petHome', server, {safe:true});
+
+  db.open(function(err, db){
+    if(!err){
+      db.collection('set',{safe:true}, function(err, collection){
+        if(err){
+          console.log(err);
+        }
+        collection.findOne({},function(err, doc) {
+          if(doc == null) {
+
+          } else {
+            global.set = doc;
+          }
+        });
+      });
+    }
+  }); 
+}
+
+load();
 
 module.exports = app;
