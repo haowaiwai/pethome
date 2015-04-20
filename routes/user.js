@@ -193,38 +193,6 @@ router.post('/list', function(req, res, next) {
 	}); 
 });
 
-router.post('/test', function(req, res, next) {
-	var apn = require('apn');
-	var token = '69c16e9040bf267b9d81b3ae53e7d1ab8e5b0a5f4e36a0fb9c96273b632a9504'; //长度为64的设备Token
-	var options = { "gateway": "gateway.sandbox.push.apple.com" },
-	apnConnection = new apn.Connection(options),
-	device = new apn.Device(token),
-	note = new apn.Notification();
-	note.expiry = Math.floor(Date.now() / 1000) + 60;
-	note.badge = 3;
-	note.alert = "动漫驿站 \n点击查看更新的1篇文章";
-	note.payload = {'messageFrom': 'Caroline'};
-	apnConnection.on('connected',function() {
-	console.log("Connected");
-	});
-	apnConnection.on('transmitted',function(notification, device) {
-	console.log("Notificationtransmitted to:" + device.token.toString('hex'));
-	});
-	apnConnection.on('transmissionError',function(errCode, notification, device) {
-	console.error("Notificationcaused error: " + errCode + " for device ", device,notification);
-	});
-	apnConnection.on('timeout',function () {
-	console.log("ConnectionTimeout");
-	});
-	apnConnection.on('disconnected',function() {
-	console.log("Disconnectedfrom APNS");
-	});
-	apnConnection.on('socketError',console.error);
-	apnConnection.pushNotification(note, device);
-	json = {"result" : 0,"reason" : ""};
-	res.send(json);
-});
-
 router.post('/set', function(req, res, next) {
 	var  mongodb = require('mongodb');
 	var  server  = new mongodb.Server('localhost', 27017, {auto_reconnect:true});

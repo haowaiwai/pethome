@@ -73,7 +73,53 @@ router.post('/health', function(req, res, next) {
 						collection.insert(req.body,{safe:true},function(err, result){
 							
 		 				});
-		 				var now = moment().format("YYYY-MM-DD HH:mm:ss");
+		 				console.log(global.set.data);
+		 				for (var i = 0; i < global.set.data.length; i++) {
+		 					var now = moment().format("YYYY-MM-DD HH:mm:ss");
+		 					var start = now.substring(0,11) + global.set.data[i].StartTime;
+		 					var end = now.substring(0,11) + global.set.data[i].EndTime;
+		 					var upload = req.body.date;
+		 					if((upload > start)&&(upload < end)) {
+		 						var key = start + global.set.data[i].EndTime;
+		 						var TemperatureMin = global.set.data[i].TemperatureMin;
+		 						var TemperatureMax = global.set.data[i].TemperatureMax;
+		 						var RunCount = global.set.data[i].RunCount;
+		 						var StartTime = start;
+		 						var EndTime = end;
+		 						db.collection('push',{safe:true}, function(err, collection){
+									if(err){
+										console.log(err);
+									}
+									collection.find({'id':key}).toArray(function(err, docs) {
+										if(docs.length == 0) {
+											var json = {};
+											json.id = key;
+											json.t = [];
+											json.a = [];
+											json.t.push(req.body.temperatureArray[0].T);
+											json.a.push(req.body.temperatureArray[0].A);
+											json.StartTime = StartTime;
+											json.EndTime = EndTime;
+											json.TemperatureMin = TemperatureMin;
+											json.TemperatureMax = TemperatureMax;
+											json.RunCount = RunCount;
+											json.push = 0;
+											json.send = 0;
+											collection.insert(json,{safe:true},function(err, result){
+												db.close();
+					 						}); 
+										} else {
+											collection.update({"id":key}, {$push:{'t':req.body.temperatureArray[0].T,'a':req.body.temperatureArray[0].A}}, {safe:true}, function(err, result){
+												db.close();
+											});
+										}
+									});
+									
+								});
+		 						break;
+		 					}
+		 				}
+		 				/*var now = moment().format("YYYY-MM-DD HH:mm:ss");
 		 				var start = now.substring(0,11) + global.set.StartTime;
 		 				var end = now.substring(0,11) + global.set.EndTime;
 		 				collection.find({"$and":[{"date":{"$gt":start}},{"date":{"$lt":end}}]}).sort({'date':1}).toArray(function(err, docs) {
@@ -84,7 +130,7 @@ router.post('/health', function(req, res, next) {
 		 						}
 		 					}
 		 					db.close();
-		 				});
+		 				});*/
 					});
 				});
 			});
