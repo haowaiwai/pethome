@@ -1,4 +1,5 @@
 var express = require('express');
+var moment = require('moment');
 var router = express.Router();
 var ObjectID=require('mongodb').ObjectID;
 
@@ -57,13 +58,34 @@ router.post('/health', function(req, res, next) {
 	var  db = new mongodb.Db('petHome', server, {safe:true});
 	db.open(function(err, db){
 		if(!err){
+			console.log(req.body);
 			db.collection('pet',{safe:true}, function(err, collection){
 				if(err){
 					console.log(err);
 				}
-				console.log(req.body);
 				collection.update({"_id":ObjectID(req.body.id)}, {$set:req.body}, {safe:true}, function(err, result){
-					db.close();
+					db.collection('health',{safe:true}, function(err, collection){
+						if(err){
+							console.log(err);
+						}
+						req.body.t = req.body.temperatureArray[0].T;
+						req.body.a = req.body.temperatureArray[0].A;
+						collection.insert(req.body,{safe:true},function(err, result){
+							
+		 				});
+		 				var now = moment().format("YYYY-MM-DD HH:mm:ss");
+		 				var start = now.substring(0,11) + global.set.StartTime;
+		 				var end = now.substring(0,11) + global.set.EndTime;
+		 				collection.find({"$and":[{"date":{"$gt":start}},{"date":{"$lt":end}}]}).sort({'date':1}).toArray(function(err, docs) {
+		 					if(docs.length >= 2 && global.set.Push == 0) {
+		 						if(docs[docs.length-1].a - docs[0].a < global.set.RunCount) {
+		 							console.log("bbbbbbbbbb");
+		 							global.set.Push = 1;
+		 						}
+		 					}
+		 					db.close();
+		 				});
+					});
 				});
 			});
 		}

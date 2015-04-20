@@ -17,6 +17,7 @@
     "apn": "*",
     "bson": "*",
     "connect-multiparty": "*",
-    "file-stream-rotator": "*"
+    "file-stream-rotator": "*",
+    "moment": "*"
   }
 }

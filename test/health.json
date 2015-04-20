@@ -1,14 +1,12 @@
 {
     "latitude": "121.083",
     "longitude": "32.088",
-    "date": "2015-04-10 09:00:00",
+    "date": "2015-04-10 10:00:34",
     "address": "hahaayimiao",
-    "hearRateArray": [
-        "2.28",
-        "3.56"
+    "hearRateArray" : [ 
+        "--4.35,2.26,2.27\r\n"
     ],
-    "temperatureArray": [
-        "29.2",
-        "32.4"
+    "temperatureArray" : [ 
+        "T:25.03,A:56"
     ]
 }

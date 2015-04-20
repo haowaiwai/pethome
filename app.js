@@ -25,7 +25,7 @@ fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory)
 var uploadDirectory = __dirname + '/public/images/user'
 fs.existsSync(uploadDirectory) || fs.mkdirSync(uploadDirectory);
 var logFile = logDirectory + "/pet.log";
-var rotatingLogStream = require('file-stream-rotator').getStream({filename:logFile, frequency:"1h", verbose: false});
+var rotatingLogStream = require('file-stream-rotator').getStream({filename:logFile, frequency:"24h", verbose: false});
 //app.use(logger('dev',{stream: accessLogStream}));
 logger.token('type', function(req, res){ return JSON.stringify(req.body); })
 app.use(logger(':method :url :status :type',{stream: rotatingLogStream}));
