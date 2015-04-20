@@ -89,6 +89,7 @@ function load() {
           if(doc == null) {
 
           } else {
+            console.log(doc);
             global.set = doc;
           }
         });

@@ -203,9 +203,15 @@ router.post('/set', function(req, res, next) {
 				if(err){
 					console.log(err);
 				}
-				collection.update({"id":1}, {$set:req.body}, {safe:true}, function(err, result){
-					global.set = req.body;
-					db.close();
+				collection.update({"id":1}, {$push:{'data':req.body}}, {safe:true}, function(err, result){
+					collection.findOne({},function(err, doc) {
+						if(doc == null) {
+
+						} else {
+							global.set = doc;
+						}
+						db.close();
+					});
 				});
 			});
 		}

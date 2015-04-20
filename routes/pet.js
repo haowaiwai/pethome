@@ -73,8 +73,8 @@ router.post('/health', function(req, res, next) {
 						collection.insert(req.body,{safe:true},function(err, result){
 							
 		 				});
-		 				console.log(global.set.data);
-		 				for (var i = 0; i < global.set.data.length; i++) {
+		 				//console.log(global.set);
+		 				/*for (var i = 0; i < global.set.data.length; i++) {
 		 					var now = moment().format("YYYY-MM-DD HH:mm:ss");
 		 					var start = now.substring(0,11) + global.set.data[i].StartTime;
 		 					var end = now.substring(0,11) + global.set.data[i].EndTime;
@@ -118,7 +118,7 @@ router.post('/health', function(req, res, next) {
 								});
 		 						break;
 		 					}
-		 				}
+		 				}*/
 		 				/*var now = moment().format("YYYY-MM-DD HH:mm:ss");
 		 				var start = now.substring(0,11) + global.set.StartTime;
 		 				var end = now.substring(0,11) + global.set.EndTime;
