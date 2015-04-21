@@ -6,7 +6,7 @@ block navbar
 	li(class='active')
 		a(href='/list') 推送
 	li
-		a(href='#') Home
+		a(href='/map') 地图
 
 block content
 	.jumbotron
@@ -47,37 +47,11 @@ block content
 		br
 		table.table.table-hover
 			tr
-				th 开始时间
-				th 结束时间
-				th 温度最小值
-				th 温度最大值
-				th 运动量最小值
-				- for (var i = 0; i < data.length; ++i) {
-					tr
-						td #{data[i].StartTime}
-						td #{data[i].EndTime}
-						td #{data[i].TemperatureMin}
-						td #{data[i].TemperatureMax}
-						td #{data[i].RunCount}
-				- }
-		form.form-horizontal
-			.form-group
-				label.col-sm-2.control-label(for='inputEmail3') 时间段
-				.col-sm-10
-					input.form-control#inputStartTime(type='text',placeholder='开始时间XX:XX',value=StartTime)
-					input.form-control#inputEndTime(type='text',placeholder='结束时间XX:XX',value=EndTime)
-			.form-group
-				label.col-sm-2.control-label(for='inputEmail3') 宠物温度
-				.col-sm-10
-					input.form-control#inputTemperatureMin(type='number',placeholder='最小值',value=TemperatureMin)
-					input.form-control#inputTemperatureMax(type='number',placeholder='最大值',value=TemperatureMax)
-			.form-group
-				label(for='inputEmail3',class='col-sm-2 control-label') 宠物运动量
-				.col-sm-10
-					input.form-control#inputRunCount(type='number',placeholder='最小值',value=RunCount)
-			.form-group
-				div(class='col-sm-offset-2 col-sm-10')
-					button.btn.btn-lg.btn-primary#saveButton(type='button') 保存
+				th 主人
+				th 宠物昵称
+				th 宠物年龄
+				th 宠物性别
+				th 宠物模式
 		script(type='text/javascript').
 			$(function () {
 				$('#saveButton').on('click', function () {

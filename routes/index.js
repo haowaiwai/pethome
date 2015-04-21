@@ -12,4 +12,9 @@ router.get('/list', function(req, res, next) {
 	res.render('list', global.set);
 });
 
+router.get('/map', function(req, res, next) {
+	console.log(global.set);
+	res.render('map', global.set);
+});
+
 module.exports = router;

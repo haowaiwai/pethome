@@ -1,0 +1,53 @@
+doctype html
+head
+	meta(charset='utf-8')
+	meta(http-equiv='X-UA-Compatible', content='IE=edge')
+	meta(name='viewport', content='width=device-width, initial-scale=1')
+	title petHome
+	link(rel='stylesheet', href='/bootstrap/css/bootstrap.min.css')
+	link(rel='stylesheet', href='/stylesheets/map.css')
+	link(rel='stylesheet', href='/stylesheets/navbar.css')
+	script(src='http://api.map.baidu.com/api?v=2.0&ak=99b5770b0372f34a2b6505db02acd5f9')
+	script(src='/javascripts/jquery.min.js')
+	script(src='/bootstrap/js/bootstrap.min.js')
+body
+	.container
+		nav(class='navbar navbar-default')
+			.container-fluid
+				.navbar-header
+					button(type='button',name='agreement',class='navbar-toggle collapsed',data-toggle='collapse',data-target='#navbar',aria-expanded='false',aria-controls='navbar')
+						span(class='sr-only') Toggle navigation
+						span.icon-bar
+						span.icon-bar
+						span.icon-bar
+					a(class='navbar-brand' href='#') 宠物之家
+				#navbar(class='navbar-collapse collapse')
+					ul(class='nav navbar-nav')
+						li
+							a(href='/') 健康指标
+						li
+							a(href='/list') 推送
+						li(class='active')
+							a(href='/map') 地图
+	#allmap
+script(type='text/javascript').
+	// 百度地图API功能
+	var map = new BMap.Map("allmap");
+	var point = new BMap.Point(116.404, 39.915);
+	map.centerAndZoom(point, 15);
+	var json_data = [[116.404,39.915],[116.383752,39.91334],[116.384502,39.932241]];
+	var pointArray = new Array();
+	for(var i=0;i<json_data.length;i++){
+		var marker = new BMap.Marker(new BMap.Point(json_data[i][0], json_data[i][1])); // 创建点
+		map.addOverlay(marker);    //增加点
+		pointArray[i] = new BMap.Point(json_data[i][0], json_data[i][1]);
+		marker.addEventListener("click",attribute);
+	}
+	//让所有点在视野范围内
+	map.setViewport(pointArray);
+	//获取覆盖物位置
+	function attribute(e){
+		var p = e.target;
+		alert("marker的位置是" + p.getPosition().lng + "," + p.getPosition().lat);
+	}
+	
