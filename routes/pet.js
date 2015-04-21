@@ -71,10 +71,11 @@ router.post('/health', function(req, res, next) {
 						req.body.t = req.body.temperatureArray[0].T;
 						req.body.a = req.body.temperatureArray[0].A;
 						collection.insert(req.body,{safe:true},function(err, result){
-							
+							db.close();
 		 				});
 		 				//console.log(global.set);
-		 				/*for (var i = 0; i < global.set.data.length; i++) {
+		 				var db_op  = false;
+		 				for (var i = 0; i < global.set.data.length; i++) {
 		 					var now = moment().format("YYYY-MM-DD HH:mm:ss");
 		 					var start = now.substring(0,11) + global.set.data[i].StartTime;
 		 					var end = now.substring(0,11) + global.set.data[i].EndTime;
@@ -86,6 +87,7 @@ router.post('/health', function(req, res, next) {
 		 						var RunCount = global.set.data[i].RunCount;
 		 						var StartTime = start;
 		 						var EndTime = end;
+		 						db_op = true;
 		 						db.collection('push',{safe:true}, function(err, collection){
 									if(err){
 										console.log(err);
@@ -118,7 +120,10 @@ router.post('/health', function(req, res, next) {
 								});
 		 						break;
 		 					}
-		 				}*/
+		 				}
+		 				if(!db_op) {
+		 					db.close();
+		 				}
 		 				/*var now = moment().format("YYYY-MM-DD HH:mm:ss");
 		 				var start = now.substring(0,11) + global.set.StartTime;
 		 				var end = now.substring(0,11) + global.set.EndTime;

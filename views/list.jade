@@ -1,15 +1,50 @@
 extends layout
 
 block navbar
-	li(class='active')
-		a(href='/') 健康指标
 	li
+		a(href='/') 健康指标
+	li(class='active')
 		a(href='/list') 推送
 	li
 		a(href='#') Home
 
 block content
 	.jumbotron
+		span.label.label-default 北京 
+		&nbsp;&nbsp;
+		a(href='#') 大钟寺&nbsp;&nbsp;
+		a(href='#') 回龙观&nbsp;&nbsp;
+		a(href='#') 西三旗&nbsp;&nbsp;
+		br
+		br
+		span.label.label-success 上海
+		&nbsp;&nbsp;
+		a(href='#') 南京西路&nbsp;&nbsp;
+		a(href='#') 江宁路&nbsp;&nbsp;
+		a(href='#') 曹家渡&nbsp;&nbsp;
+		br
+		br
+		span.label.label-info 深圳
+		&nbsp;&nbsp;
+		a(href='#') 岗厦购物公园&nbsp;&nbsp;
+		a(href='#') 皇岗华强北华强南&nbsp;&nbsp;
+		a(href='#') 福华新村周边&nbsp;&nbsp;
+		br
+		br
+		span.label.label-warning 广州
+		&nbsp;&nbsp;
+		a(href='#') 中山大道&nbsp;&nbsp;
+		a(href='#') 珠江大道&nbsp;&nbsp;
+		a(href='#') 珠江新城&nbsp;&nbsp;
+		br
+		br
+		span.label.label-danger 杭州
+		&nbsp;&nbsp;
+		a(href='#') 崇贤&nbsp;&nbsp;
+		a(href='#') 老余杭&nbsp;&nbsp;
+		a(href='#') 临平&nbsp;&nbsp;
+		br
+		br
 		table.table.table-hover
 			tr
 				th 开始时间
