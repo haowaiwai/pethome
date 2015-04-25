@@ -8,14 +8,29 @@ router.post('/reg', function(req, res, next) {
 	var  server  = new mongodb.Server('localhost', 27017, {auto_reconnect:true});
 	var  db = new mongodb.Db('petHome', server, {safe:true});
 
+	if ((typeof(req.body.uid) == "undefined")||(typeof(req.body.password) == "undefined")) {
+		json = {"result" : 2,"reason" : ""};
+		res.send(json);
+		return;
+	}
 	db.open(function(err, db){
 		if(!err){
 			db.collection('doctor',{safe:true}, function(err, collection){
 				if(err){
 					console.log(err);
 				}
-				collection.insert(req.body,{safe:true},function(err, result){
-					db.close();
+				collection.find({"uid":req.body.uid}).toArray(function(err, docs) {
+					if(docs.length == 0) {
+						collection.insert(req.body,{safe:true},function(err, result){
+							db.close();
+							json = {"result" : 0,"reason" : ""};
+							res.send(json);
+						});
+					} else {
+						db.close();
+						json = {"result" : 1,"reason" : ""};
+						res.send(json);
+					}
 				});
 			});
 		}
@@ -29,6 +44,11 @@ router.post('/login', function(req, res, next) {
 	var  server  = new mongodb.Server('localhost', 27017, {auto_reconnect:true});
 	var  db = new mongodb.Db('petHome', server, {safe:true});
 
+	if ((typeof(req.body.uid) == "undefined")||(typeof(req.body.password) == "undefined")) {
+		json = {"result" : 2,"reason" : ""};
+		res.send(json);
+		return;
+	}
 	db.open(function(err, db){
 		if(!err){
 			db.collection('doctor',{safe:true}, function(err, collection){
